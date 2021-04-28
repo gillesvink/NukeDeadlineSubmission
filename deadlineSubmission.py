@@ -97,36 +97,43 @@ def main(specifiedNode = False):
     if not nuke.Root().name() == 'Root':
 
         # Detect if script has unsaved changes
-        if nuke.Root().modified() == False:
-            try:
-                # Setting selectedNode
-                if not specifiedNode:
-                    selectedNode = nuke.selectedNode()
-                else:
-                    selectedNode = nuke.toNode(specifiedNode)
+        if nuke.Root().modified():
+            if nuke.ask("The script has unsaved changes, would you like to save them?"):
+                nuke.scriptSave()
+                try:
+                    # Setting selectedNode
+                    if not specifiedNode:
+                        selectedNode = nuke.selectedNode()
+                    else:
+                        selectedNode = nuke.toNode(specifiedNode)
 
-                # Making sure selected node is a write node
-                if selectedNode.Class() in ["Write", "WriteTank"]:
-                    deadlineSubmission = deadlineSubmissionPanel()
+                    # Making sure selected node is a write node
+                    if selectedNode.Class() in ["Write", "WriteTank"]:
+                        deadlineSubmission = deadlineSubmissionPanel()
 
-                    if deadlineSubmission.showModalDialog():
-                        # Setting values specified by user
-                        jobName = deadlineSubmission.submissionName.value()
-                        priority = deadlineSubmission.priority.value()
-                        frameList = deadlineSubmission.frameList.value()
-                        writeNode = selectedNode.name()
-                        try:
-                            # Submit to deadline using submission script
-                            submitJob(jobName, priority, frameList, writeNode)
+                        if deadlineSubmission.showModalDialog():
+                            # Setting values specified by user
+                            jobName = deadlineSubmission.submissionName.value()
+                            priority = deadlineSubmission.priority.value()
+                            frameList = deadlineSubmission.frameList.value()
+                            writeNode = selectedNode.name()
 
-                        except Exception as exception:
-                            # If error occurs print error in message
-                            nuke.message("An error occured.\n" + str(exception))
-                else:
-                    nuke.message("A write node must be selected.")
-            except Exception as exception:
-                nuke.message("No node selected.")
-        else:
-            nuke.message("The script has been modified, save it before submitting.")
+                            try:
+                                # Submit to deadline using submission script
+                                submitJob(jobName, priority, frameList, writeNode)
+
+                            except Exception as exception:
+                                # If error occurs print error in message
+                                nuke.message("An error occured.\n" + str(exception))
+
+                    else:
+                        nuke.message("A write node must be selected.")
+
+                except:
+                    nuke.message("No node selected.")
+
+            else:
+                pass
+
     else:
         nuke.message("The script must be saved first.")
