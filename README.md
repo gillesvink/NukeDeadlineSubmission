@@ -1,32 +1,29 @@
 # NukeDeadlineSubmission
-Simple script to easily submit Nuke script to Deadline renderfarm. It will only submit the write node the artist has selected.
-(Currently used at the Netherlands Filmacademy)
+
+Script to easily submit via the Nuke User Interface to Deadline. It will create a small dialog where the user can submit the selected write node.
+
+![Deadline submitter](/resources/submitter.png)
 
 ## Compatibility
-* Tested on Windows and Nuke 12/13
+* Tested on Linux/Mac/Windows
 
-## How to use
-1. Copy deadlineSubmission.py to the .nuke installation folder.
-2. Append the lines from menu.py to your menu.py file. (Or copy the lines from below)
+## How to install
+* Copy the `deadline_submission` folder to your `.nuke` folder or any other installation where Nuke is pointed to.
+* Copy the `menu.py` file to your `.nuke` folder, or add the following line to your own `menu.py` file. `nuke.pluginAddPath("./deadline_submission")`
+
+## How to change the submission shortcut
+* The shortcut can be easily changed via the `menu.py` file inside the `deadline_submission` folder. Change the `shortcut` variable to any shortcut you would like.
 ```
-# Deadline integration
-import deadlineSubmission
-menubar = nuke.menu("Nuke")
-deadlineMenu = menubar.addMenu("&Render")
-deadlineMenu.addCommand("-", "", "")
-deadlineMenu.addCommand("Submit Nuke To Deadline", deadlineSubmission.main, "Ctrl+R")
+shortcut = "F5"
 ```
 
-3. Use CTRL + R to submit the write node you have selected.
-
-
-#### Preview of submission panel
-![Preview of submission panel](https://vinkvfx.com/afb/SubmitToFarm.png)
-
-## Usage of script in custom tools
-* The script can also be used from Python Script buttons. Use for example the following code:
+## Using Deadline submisison inside your tools
+* You can use the `submit(node)` function.
 ```
-import deadlineSubmission
-selectedNode = nuke.thisNode()
-deadlineSubmission.main(selectedNode)
+import deadline_submission
+submission_node = nuke.thisNode()
+deadline_submission.DeadlineSubmission().submit(submission_node)
 ```
+
+## Add validations
+* Using the `sanity_check` other checks can be added. The file itself provides a guide on where to add your own functions and checks.
