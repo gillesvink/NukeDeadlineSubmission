@@ -26,4 +26,4 @@ deadline_submission.DeadlineSubmission().submit(submission_node)
 ```
 
 ## Add validations
-* Using the `sanity_check` other checks can be added. The file itself provides a guide on where to add your own functions and checks.
+* Using the `sanity_check.py` other checks can be added. The file itself provides a guide on where to add your own functions and checks.
