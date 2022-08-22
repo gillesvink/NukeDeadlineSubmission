@@ -248,7 +248,7 @@ class DeadlineSubmission:
             ]
 
             # Append the text files for the submission parameters
-            deadline_command.append(submission_files)
+            deadline_command = deadline_command + submission_files
 
             # Create a subprocess using deadlinecommand and run the submission
             submission = check_output(deadline_command)
